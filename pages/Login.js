@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, ImageBackground} from 'react-native';
 import styles from '../Styles';
 import { authentication, db } from '../Firebase-config';
 import { doc, setDoc} from 'firebase/firestore'
@@ -13,7 +13,6 @@ export default function Login({navigation}){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('passord1');
     const [email, setEmail] = useState('jojo@hotmail.lele');
-
     // Navigate to game and set allbuttons to not owned
     const navigatoinhandler = () => {
         AllButtons.forEach(element => {
@@ -72,17 +71,17 @@ export default function Login({navigation}){
     if(createuser){
         return(
             <View style={styles.container}>
-
+           
             <View style={LoginStyle.top}>
-                <Image source={require('../ButtonImage/Logo.png')} style={{width:200, height: 200}}/>
+                <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
             </View>
 
             <View style={LoginStyle.mid}>
-             <TextInput style={LoginStyle.text} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
             <View style={{height:10}}></View>
-             <TextInput style={LoginStyle.text} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
              <View style={{height:10}}></View>
-             <TextInput style={LoginStyle.text} placeholder='Username' value={username} onChangeText={(text) => setUsername(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Username' value={username} onChangeText={(text) => setUsername(text)}/>
              <View style={{height:10}}></View>
              <TouchableOpacity style={styles.ButtonContainer} onPress={registerUser}>
                  <Text style={styles.ButtonText}>Register</Text>
@@ -108,15 +107,16 @@ export default function Login({navigation}){
             <View style={styles.container}>
             
             <View style={LoginStyle.top}>
-                <Image source={require('../ButtonImage/Logo.png')} style={{width:200, height: 200}}/>
+                <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
             </View>
 
             <View style={LoginStyle.mid}>
-            <TextInput style={LoginStyle.text} placeholder='email' value={email} onChangeText={(text) => setEmail(text)}/>
-            <View style={{height:10}}></View>
-            <TextInput style={LoginStyle.text} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
-            <View style={{height:10}}></View>
 
+            
+            <TextInput style={LoginStyle.input} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
+            <View style={{height:10}}></View>
+            <TextInput style={LoginStyle.input} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
+            <View style={{height:10}}></View>
             {isSignedin === true?
                 <TouchableOpacity style={styles.ButtonContainer} onPress={signoutUser}>
                     <Text style={styles.ButtonText}>Sign out</Text>
@@ -179,6 +179,15 @@ const LoginStyle = StyleSheet.create({
         fontSize: 15,
         color: 'black'
     },
+    input: {
+        height: 40,
+        margin: 5,
+        borderWidth: 2,
+        padding: 10,
+        backgroundColor: 'white',
+        width: 200
+      },
+    
   
 
 })

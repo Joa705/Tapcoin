@@ -159,7 +159,7 @@ export default function Leaderboard({navigation}){
 
 
               <View style={leaderstyles.container}>
-                    <Text style={styles.ButtonText}>{friendPage}</Text>
+                    <Text style={{color: 'white', fontSize: 20}}>{friendPage}</Text>
                     <View style={{height:10}}></View>
                     <View style={{flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.ButtonContainer} onPress={() => setFriendPage('All Users')}>

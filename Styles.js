@@ -4,7 +4,6 @@ import { StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#FFD700',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -16,7 +15,7 @@ const styles = StyleSheet.create({
     },
     ButtonContainer: {
       elevation: 4,
-      backgroundColor: "#009688",
+      backgroundColor: "#f0e68c",
       borderRadius: 10,
       paddingVertical: 10,
       paddingHorizontal: 12,
@@ -24,7 +23,7 @@ const styles = StyleSheet.create({
     },
     ButtonText: {
       fontSize: 16,
-      color: "#F0EFEF",
+      color: "black",
       fontWeight: "bold",
       alignSelf: "center",
       textTransform: "uppercase",

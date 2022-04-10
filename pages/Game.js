@@ -127,11 +127,7 @@ export default function Game({navigation}){
 
 
 
-    //Navigate to leaderboard
-    const navigationhandler = (type) => {
-        navigation.navigate(type);
-    };
-
+   
 
     useEffect(() => {
         if(count == -1){getuserPageload()}
@@ -158,30 +154,19 @@ export default function Game({navigation}){
         <View style={styles.container}>
 
             <View style={GameStyles.top}>
-            <Text>Username: {userName}</Text>
+            <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18}}>Username: {userName}</Text>
             </View>
             
 
             <View style={GameStyles.mid}>
-            <Text>TC: {count}</Text>
+            <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18}}>TC: {count}</Text>
              <TouchableOpacity
              onPress={() => setCount(count + 1)}>
                  <Image source={currentButton[0].name}  style={{width:currentButton[0].width, height:currentButton[0].height}}/>
              </TouchableOpacity>             
             </View>
 
-            <View style={GameStyles.bot}>
-            <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigationhandler('Leaderboard')}}>
-                 <Text style={styles.ButtonText}>Leaderboard</Text>
-             </TouchableOpacity>
-
-            <View style={{height:20}}></View>
-
-            <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigationhandler('Buttons')}}>
-                 <Text style={styles.ButtonText}>Store</Text>
-             </TouchableOpacity>
-            </View>
-             
+                
 
         </View>
     )
@@ -194,7 +179,7 @@ const GameStyles = StyleSheet.create ({
         justifyContent: 'center',
       },
     mid: {
-        flex: 1,
+        flex: 4,
         alignItems: 'center',
         justifyContent: 'center',
     },

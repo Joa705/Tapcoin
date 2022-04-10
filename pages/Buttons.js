@@ -152,10 +152,11 @@ const butStyles = StyleSheet.create({
         height: 300,
         borderWidth: 3,
         elevation: 4,
-        backgroundColor: "#DCC66F",
+        backgroundColor: "#000000",
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
+        borderColor: '#f0e68c'
     },
     bot: {
         flex:1,
@@ -167,7 +168,7 @@ const butStyles = StyleSheet.create({
     },
     ButtonContainer: {
         elevation: 4,
-        backgroundColor: "#009688",
+        backgroundColor: "#f0e68c",
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
