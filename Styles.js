@@ -7,14 +7,13 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    logo: {
+    logotext: {
         fontSize: 40,
-        color: "gold",
-        
-        
+        color: "black",
+        position: 'absolute',       
     },
     ButtonContainer: {
-      elevation: 4,
+      elevation: 8,
       backgroundColor: "#f0e68c",
       borderRadius: 10,
       paddingVertical: 10,

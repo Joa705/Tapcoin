@@ -154,7 +154,9 @@ export default function Game({navigation}){
         <View style={styles.container}>
 
             <View style={GameStyles.top}>
-            <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18}}>Username: {userName}</Text>
+                <View style={{borderBottomWidth: 2, borderColor: '#674919', width: 180, alignItems: 'center'}}>
+                    <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18, textTransform: "uppercase",}}>{userName}</Text>
+                </View>
             </View>
             
 

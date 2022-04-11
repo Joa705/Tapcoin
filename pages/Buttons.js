@@ -112,9 +112,9 @@ export default function Buttons({navigation}){
                 return(
                     <View key={element.id}  style={butStyles.top}>
                         {element.owned === false?
-                        <Text style={{fontSize: 18}}>Price: {element.price} TC</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>Price: {element.price} TC</Text>
                         :
-                        <Text style={{fontSize: 18}}>Owned</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>Owned</Text>
                         }
 
                         <View style={{alignItems: 'center', justifyContent: 'center'}}> 
@@ -148,15 +148,9 @@ const butStyles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
         height: 300,
-        borderWidth: 3,
-        elevation: 4,
-        backgroundColor: "#000000",
-        borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
-        borderColor: '#f0e68c'
     },
     bot: {
         flex:1,

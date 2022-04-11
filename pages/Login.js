@@ -8,7 +8,6 @@ import AllButtons from '../AllButtons';
 
 export default function Login({navigation}){
 
-    const [isSignedin, setIssignedin] = useState(false);
     const [createuser, setCreateuser] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('passord1');
@@ -34,7 +33,6 @@ export default function Login({navigation}){
     const signinUser = () => {
         signInWithEmailAndPassword(authentication, email, password)
         .then((re) => {
-            setIssignedin(true);
             navigatoinhandler();
         })
         .catch((re) => {
@@ -42,14 +40,7 @@ export default function Login({navigation}){
         })
     };
 
-    //sign out user
-    const signoutUser = () => {
-        signOut(authentication)
-        .then((re) => {
-            setIssignedin(false)
-        })
-        .catch((re) => {console.log("failed to sign out")})
-    };
+   
 
     //Register a new user account, then redirect to game page
     const registerUser = () => {
@@ -57,7 +48,6 @@ export default function Login({navigation}){
         .then((re) =>{
              console.log("User registert");
              createnewUser().then((re) =>{
-                setIssignedin(true);
                 setCreateuser(false);
                 navigatoinhandler();
              }).catch((re) => {console.log("failed to add user in firestore")})
@@ -74,6 +64,8 @@ export default function Login({navigation}){
            
             <View style={LoginStyle.top}>
                 <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
+                <Text style={styles.logotext}>TapCoin</Text>
+
             </View>
 
             <View style={LoginStyle.mid}>
@@ -108,6 +100,7 @@ export default function Login({navigation}){
             
             <View style={LoginStyle.top}>
                 <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
+                <Text style={styles.logotext}>TapCoin</Text>
             </View>
 
             <View style={LoginStyle.mid}>
@@ -117,29 +110,15 @@ export default function Login({navigation}){
             <View style={{height:10}}></View>
             <TextInput style={LoginStyle.input} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
             <View style={{height:10}}></View>
-            {isSignedin === true?
-                <TouchableOpacity style={styles.ButtonContainer} onPress={signoutUser}>
-                    <Text style={styles.ButtonText}>Sign out</Text>
-                </TouchableOpacity>
-                :
+         
+
                 <TouchableOpacity style={styles.ButtonContainer} onPress={signinUser}>
                     <Text style={styles.ButtonText}>Sign in</Text>
                 </TouchableOpacity>
-            }
-
             <View style={{height:20}}></View>
 
-            {isSignedin === true?
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigation.navigate('Game')}}>
-                    <Text style={styles.ButtonText}>Go to game</Text>
-                </TouchableOpacity>
-                :
-                <Text></Text>                
-
-            }
             </View>
-            
-           
+        
             
             <View style={LoginStyle.bot}>      
              <TouchableOpacity style={styles.ButtonContainer} onPress={() => setCreateuser(true)}>

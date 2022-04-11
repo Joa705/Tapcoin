@@ -73,17 +73,21 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
+  //Signout Current user 
   signOut(authentication);
 
+  //Check users current state
   onAuthStateChanged(authentication, (user) => {
     if(user){
       console.log("logged in");
     }
     else{console.log("not logged inn")}
   });
-
+   
+  //Background image
   const backgroundImage = require('./ButtonImage/YellowStripeBackground.jpg')
 
+  //Theme in order to show the background
   const navTheme = {
     ...DefaultTheme,
     colors: {

@@ -96,8 +96,8 @@ export default function Leaderboard({navigation}){
             <View>
                 {FriendsRef.map((doc) =>(
                     <View key={doc.id} style={leaderstyles.top}>
-                        <Text style={styles.ButtonText}>{doc.name}</Text>
-                        <Text style={styles.ButtonText}>TC: {doc.score}</Text>
+                        <Text style={{color: "white", textTransform: "uppercase",}}>{doc.name}</Text>
+                        <Text style={{color: "white", textTransform: "uppercase",  fontWeight: 'bold'}}>TC: {doc.score}</Text>
                       
                      
                         <View style={{position: 'absolute', right: 10}}>
@@ -118,8 +118,8 @@ export default function Leaderboard({navigation}){
             <View>
                  {usersList.map((item) =>(
                     <View key={item.Email} style={leaderstyles.top}>
-                        <Text style={styles.ButtonText}>{item.Username}</Text>
-                        <Text style={styles.ButtonText}>TC: {item.Score}</Text>                      
+                        <Text style={{color: "white", textTransform: "uppercase",}}>{item.Username}</Text>
+                        <Text style={{color: "white", textTransform: "uppercase", fontWeight: 'bold'}}>TC: {item.Score}</Text>                      
                       
                         
                         <View style={{position: 'absolute', right: 10}}>
@@ -187,25 +187,29 @@ const leaderstyles = StyleSheet.create({
     outertop:{
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth: 3,
-        elevation: 4,
-        backgroundColor: "#DCC66F",
+        elevation: 5,
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
-        width:350
+        width:350,
+        borderColor: "#f0e68c",
+        
+        
     },
     top: {
         alignItems: 'center',
         justifyContent: 'center',
         height: 100,
-        borderWidth: 3,
+        borderWidth: 1,
         elevation: 4,
-        backgroundColor: "#DCC66F",
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
-        width:300
+        width:300,
+        borderColor: "#f0e68c",
+        
+
+        
     },
     list: {
         flex: 4,
