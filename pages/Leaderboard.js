@@ -39,11 +39,13 @@ export default function Leaderboard({navigation}){
     };
 
 
+    // Delete user with selected "id"
     const DeleteUsersFriend = async (id) => {
         const docref = doc(db, "Users", currentUser.email, "Friends", id);
         await deleteDoc(docref)
         .then(() => {
             console.log("Removed friend " + id)
+            // Get the updated userfriends list
             GetUsersFriends()
         })
         .catch(() => {console.log("Failed to remove firend " + id)});
