@@ -140,11 +140,11 @@ export default function Game({navigation}){
     useEffect(() => {
         if(count == -1){getuserPageload()}
         
-          //Check for Updates in LocalStorage every 2 second
+          //Check for Updates in LocalStorage every second
           const IntervalLocal = setInterval(() => {
             getData()
 
-        }, 1000 * 2);
+        }, 1000 * 1);
 
 
         return () => {

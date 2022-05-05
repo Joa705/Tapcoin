@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { StatusBar } from 'expo-status-bar';
-import {ScrollView, StyleSheet, TextInput, Text, View, Button, LogBox, ImageBackground, Image, TouchableOpacity, Dimensions} from 'react-native';
+import {ScrollView, StyleSheet, Alert, TextInput, Text, View, Button, LogBox, ImageBackground, Image, TouchableOpacity, Dimensions} from 'react-native';
 import styles from '../Styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authentication, db } from '../Firebase-config';
@@ -11,6 +11,18 @@ export default function Buttons({navigation}){
 
 
     const [buttons, setButtons] = useState(allButtons);
+
+    // Alert messages if person doesnt have enough coins
+    const buttonAlert = (balance) =>
+    Alert.alert(
+      "Not enough Tapcoins!",
+      "Current balance: " + balance,
+      [
+       
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+
 
    // Get data stored locally
    const getData = async (Price1, id) => {
@@ -31,16 +43,21 @@ export default function Buttons({navigation}){
 
   // Store Username and users score locally
   const storeData = async (count1, Price1, id) => {
-    const newScore = count1 - Price1
+    const newScore = count1 - Price1 // Set the new users balance
+
+    // If balance is under 0, the user doesnt have enough money. Then send an alert message
     if(newScore < 0){
-        console.log("Not enough TC")
+        buttonAlert(count1)
         return
     };
+
+    // If user has enough coins, store the new balance
     const scoreData = JSON.stringify(newScore);
     try { 
         await AsyncStorage.setItem('score', scoreData)
         .then(() => {
             console.log("Button Bought")
+
             //Update the users score in firebase
             updateUserScore(newScore, id);
         })
@@ -50,10 +67,8 @@ export default function Buttons({navigation}){
     }
 
 
-    
     const buyButton = async (thisPrice, id) => {
-        getData(thisPrice, id);
-            
+        getData(thisPrice, id);            
     }
        
 
