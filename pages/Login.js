@@ -12,6 +12,9 @@ export default function Login({navigation}){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('passord1');
     const [email, setEmail] = useState('jojo@hotmail.lele');
+
+
+
     // Navigate to game and set allbuttons to not owned
     const navigatoinhandler = () => {
         AllButtons.forEach(element => {
@@ -24,10 +27,7 @@ export default function Login({navigation}){
         navigation.navigate('Game');
     }
 
-    //Async function to add a new student
-    const createnewUser = async () => {
-        await setDoc(doc(db, "Users", email), {Username: username,  Email: email, Score: 0})
-    }
+
 
     //Sign in to user account
     const signinUser = () => {
@@ -40,16 +40,18 @@ export default function Login({navigation}){
         })
     };
 
+
    
 
     //Register a new user account, then redirect to game page
     const registerUser = () => {
-        createUserWithEmailAndPassword(authentication, email, password)
+        createUserWithEmailAndPassword(authentication, email, password) // Register new user to firebase. 
         .then((re) =>{
              console.log("User registert");
-             createnewUser().then((re) =>{
-                setCreateuser(false);
-                navigatoinhandler();
+             setDoc(doc(db, "Users", email), {Username: username,  Email: email, Score: 0}) // Create a document in firestore for that user. 
+             .then((re) =>{
+                setCreateuser(false); // Change the view
+                navigatoinhandler(); // Navigate to the game page
              }).catch((re) => {console.log("failed to add user in firestore")})
              
             })

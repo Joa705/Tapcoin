@@ -1,8 +1,10 @@
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image } from 'react-native';
 import styles from '../Styles';
-import {signoutUser, updateUserScore} from '../functions/Firebase'
-import {getUsesScoreData} from '../functions/LocalStorage'
 import {db, authentication} from '../Firebase-config'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth'
+import { getDoc, doc, updateDoc, getDocs, collection, setDoc, addDoc} from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 export default function Settings({navigation}){
@@ -10,31 +12,37 @@ export default function Settings({navigation}){
   
 
     // Signout user and navigate to login screen
-    const navigateHome = () => {
+    const navigateHome = async () => {
       
-        getUsesScoreData() // Get users current score from locastorage 
+        await AsyncStorage.getItem('score') // Get users current score from locastorage 
         .then((res) => {
-        })
-        .catch((err) => console.log(err))
+            const result = parseInt(res)
 
-        
-        updateUserScore(5000) // Update score to firestore
-        .then(() => {
-            signoutUser(); // Sign out the current user
-            navigation.navigate('Login') // Navigate to the Login page
+            const currentUser = authentication.currentUser;
+            const docRef = doc(db, 'Users', currentUser.email);
+            updateDoc(docRef, {'Score': result}) // Update score to firestore
+            .then(() => {
+                signOut(authentication) // Sign out the current user
+                navigation.navigate('Login') // Navigate to the Login page
+            })
+            .catch((err) => console.log(err))
+    
         })
         .catch((err) => console.log(err))
+       
 
 
     }   
 
 
 
-    const redirectuser = () => {
-        console.log(authentication.currentUser.email)
-        signoutUser()
-        navigation.navigate('Login')
+    // Update Users score data in firestore Database
+    const updateUserScore = async (thisscore) => {
+
     }
+      
+
+
  
 
 

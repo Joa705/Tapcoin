@@ -45,8 +45,9 @@ export default function Leaderboard({navigation}){
         await deleteDoc(docref)
         .then(() => {
             console.log("Removed friend " + id)
+
             // Get the updated userfriends list
-            GetUsersFriends()
+            GetUsersFriends()    
         })
         .catch(() => {console.log("Failed to remove firend " + id)});
 
@@ -80,7 +81,7 @@ export default function Leaderboard({navigation}){
             console.log(usersFriend)
             return(
                 <View>
-                    <Text>No Friends Added</Text>
+                    <Text style={{color: "white", textTransform: 'uppercase', fontWeight: 'bold'}}>No Friends Added</Text>
                 </View>
             )
         }

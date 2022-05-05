@@ -5,7 +5,6 @@ import { authentication, db } from '../Firebase-config';
 import { getDoc, doc, updateDoc, getDocs, collection} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AllButtons from '../AllButtons';
-import { HeaderBackButton } from 'react-navigation-stack';
 
 
 
@@ -17,17 +16,9 @@ export default function Game({navigation}){
     const [userName, setUserName] = useState('');
     const [currentButton, setCurrentButton] = useState([{'id': '0', 'name': require('../ButtonImage/mynt.png'), 'height': 150 * 1.5, 'width': 150 * 1.5} ]);
 
-    //Update score to firstore when pressing back button
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-          headerLeft: () => (
-            <HeaderBackButton onPress={() => {updateUserScore(count, true)}}/>
-          )
-        })
-      }, [count])
-    
 
-     // Store users score in locallstorage.
+    
+    // Store users score in locallstorage.
     const storeData = async (count1) => {
         const scoreData = JSON.stringify(count1);
         try { 
@@ -65,9 +56,11 @@ export default function Game({navigation}){
             if(thiscurrentButton !== null){
                 if(thiscurrentButton != currentButton[0].id)
                 console.log("Currentbutton " + thiscurrentButton)
+
+                // Loop true each button and find the selected button
                 AllButtons.forEach(element => {
                     if(element.id == thiscurrentButton){
-                        if(element.owned == false){return}
+                        if(element.owned == false){return} // If the user dosent own that button, return
                         setCurrentButton([{'id': element.id, 'name': element.name, 'height': element.height * 1.5, 'width': element.width * 1.5}]);
                         return;
                     }
@@ -111,21 +104,36 @@ export default function Game({navigation}){
 
 
 
+
+
+    useEffect(() => {
+    
     // Update Users score in firestore Database
-    const updateUserScore = async (thisscore, nav) => {
-        const currentUser = authentication.currentUser;
+    const updateUserScore = async () => {
+        const localScore = await AsyncStorage.getItem('score'); // Get score local
+            if (localScore === null){ 
+                return
+            }
+        const currentScore = parseInt(localScore);
+
+        console.log(currentScore)
+        const currentUser = authentication.currentUser; // Get current user
         const docRef = doc(db, 'Users', currentUser.email);
-        await updateDoc(docRef, {'Score': thisscore})
+        await updateDoc(docRef, {'Score': currentScore}) // Update score to firestore for that user
         .then((result) => {console.log("Updated Score")})
         .catch((result) => {console.log("Failed to update score")})
+                
+    }   
 
-        if(nav === true){
-            navigation.navigate('Login');
-            console.log("Updated score 2")
-        }
+    const Interval = setInterval(() => {
+        updateUserScore()
+    }, 1000 * 10)
+
+    return () => {
+        clearInterval(Interval);
     }
 
-
+    }, [])
 
    
 
