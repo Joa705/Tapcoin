@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, Image, ImageBackground} from 'react-native';
 import styles from '../Styles';
 import { authentication, db } from '../Firebase-config';
 import { doc, setDoc} from 'firebase/firestore'
@@ -8,11 +8,12 @@ import AllButtons from '../AllButtons';
 
 export default function Login({navigation}){
 
-    const [isSignedin, setIssignedin] = useState(false);
     const [createuser, setCreateuser] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('passord1');
     const [email, setEmail] = useState('jojo@hotmail.lele');
+
+
 
     // Navigate to game and set allbuttons to not owned
     const navigatoinhandler = () => {
@@ -26,41 +27,31 @@ export default function Login({navigation}){
         navigation.navigate('Game');
     }
 
-    //Async function to add a new student
-    const createnewUser = async () => {
-        await setDoc(doc(db, "Users", email), {Username: username,  Email: email, Score: 0})
-    }
+
 
     //Sign in to user account
     const signinUser = () => {
         signInWithEmailAndPassword(authentication, email, password)
         .then((re) => {
-            setIssignedin(true);
-            navigatoinhandler();
+            navigatoinhandler(); // Navigate to the game page
         })
         .catch((re) => {
             console.log("failed to login")
         })
     };
 
-    //sign out user
-    const signoutUser = () => {
-        signOut(authentication)
-        .then((re) => {
-            setIssignedin(false)
-        })
-        .catch((re) => {console.log("failed to sign out")})
-    };
+
+   
 
     //Register a new user account, then redirect to game page
     const registerUser = () => {
-        createUserWithEmailAndPassword(authentication, email, password)
+        createUserWithEmailAndPassword(authentication, email, password) // Register new user to firebase. 
         .then((re) =>{
              console.log("User registert");
-             createnewUser().then((re) =>{
-                setIssignedin(true);
-                setCreateuser(false);
-                navigatoinhandler();
+             setDoc(doc(db, "Users", email), {Username: username,  Email: email, Score: 0}) // Create a document in firestore for that user. 
+             .then((re) =>{
+                setCreateuser(false); // Change the view
+                navigatoinhandler(); // Navigate to the game page
              }).catch((re) => {console.log("failed to add user in firestore")})
              
             })
@@ -72,17 +63,19 @@ export default function Login({navigation}){
     if(createuser){
         return(
             <View style={styles.container}>
-
+           
             <View style={LoginStyle.top}>
-                <Image source={require('../ButtonImage/Logo.png')} style={{width:200, height: 200}}/>
+                <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
+                <Text style={styles.logotext}>TapCoin</Text>
+
             </View>
 
             <View style={LoginStyle.mid}>
-             <TextInput style={LoginStyle.text} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
             <View style={{height:10}}></View>
-             <TextInput style={LoginStyle.text} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
              <View style={{height:10}}></View>
-             <TextInput style={LoginStyle.text} placeholder='Username' value={username} onChangeText={(text) => setUsername(text)}/>
+             <TextInput style={LoginStyle.input} placeholder='Username' value={username} onChangeText={(text) => setUsername(text)}/>
              <View style={{height:10}}></View>
              <TouchableOpacity style={styles.ButtonContainer} onPress={registerUser}>
                  <Text style={styles.ButtonText}>Register</Text>
@@ -108,38 +101,26 @@ export default function Login({navigation}){
             <View style={styles.container}>
             
             <View style={LoginStyle.top}>
-                <Image source={require('../ButtonImage/Logo.png')} style={{width:200, height: 200}}/>
+                <Image source={require('../ButtonImage/GoldenLogo.png')} style={{width:300, height: 200}}/>
+                <Text style={styles.logotext}>TapCoin</Text>
             </View>
 
             <View style={LoginStyle.mid}>
-            <TextInput style={LoginStyle.text} placeholder='email' value={email} onChangeText={(text) => setEmail(text)}/>
-            <View style={{height:10}}></View>
-            <TextInput style={LoginStyle.text} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
-            <View style={{height:10}}></View>
 
-            {isSignedin === true?
-                <TouchableOpacity style={styles.ButtonContainer} onPress={signoutUser}>
-                    <Text style={styles.ButtonText}>Sign out</Text>
-                </TouchableOpacity>
-                :
+            
+            <TextInput style={LoginStyle.input} placeholder='Email' value={email} onChangeText={(text) => setEmail(text)}/>
+            <View style={{height:10}}></View>
+            <TextInput style={LoginStyle.input} placeholder='Password' value={password} secureTextEntry={true} onChangeText={(text) => setPassword(text)}/>
+            <View style={{height:10}}></View>
+         
+
                 <TouchableOpacity style={styles.ButtonContainer} onPress={signinUser}>
                     <Text style={styles.ButtonText}>Sign in</Text>
                 </TouchableOpacity>
-            }
-
             <View style={{height:20}}></View>
 
-            {isSignedin === true?
-                <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigation.navigate('Game')}}>
-                    <Text style={styles.ButtonText}>Go to game</Text>
-                </TouchableOpacity>
-                :
-                <Text></Text>                
-
-            }
             </View>
-            
-           
+        
             
             <View style={LoginStyle.bot}>      
              <TouchableOpacity style={styles.ButtonContainer} onPress={() => setCreateuser(true)}>
@@ -179,6 +160,15 @@ const LoginStyle = StyleSheet.create({
         fontSize: 15,
         color: 'black'
     },
+    input: {
+        height: 40,
+        margin: 5,
+        borderWidth: 2,
+        padding: 10,
+        backgroundColor: 'white',
+        width: 200
+      },
+    
   
 
 })

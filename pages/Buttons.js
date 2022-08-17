@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { StatusBar } from 'expo-status-bar';
-import {ScrollView, StyleSheet, TextInput, Text, View, Button, LogBox, ImageBackground, Image, TouchableOpacity, Dimensions} from 'react-native';
+import {ScrollView, StyleSheet, Alert, TextInput, Text, View, Button, LogBox, ImageBackground, Image, TouchableOpacity, Dimensions} from 'react-native';
 import styles from '../Styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authentication, db } from '../Firebase-config';
@@ -11,6 +11,22 @@ export default function Buttons({navigation}){
 
 
     const [buttons, setButtons] = useState(allButtons);
+
+    // Alert messages if person doesnt have enough coins
+    const buttonAlert = (balance) =>
+    Alert.alert(
+      "Not enough Tapcoins!",
+      "Current balance: " + balance,
+      [
+       
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+    
+    // Init fucntion for buying a button
+    const buyButton = async (thisPrice, id) => {
+        getData(thisPrice, id);            
+    }
 
    // Get data stored locally
    const getData = async (Price1, id) => {
@@ -31,16 +47,21 @@ export default function Buttons({navigation}){
 
   // Store Username and users score locally
   const storeData = async (count1, Price1, id) => {
-    const newScore = count1 - Price1
+    const newScore = count1 - Price1 // Set the new users balance
+
+    // If balance is under 0, the user doesnt have enough money. Then send an alert message
     if(newScore < 0){
-        console.log("Not enough TC")
+        buttonAlert(count1)
         return
     };
+
+    // If user has enough coins, store the new balance
     const scoreData = JSON.stringify(newScore);
     try { 
         await AsyncStorage.setItem('score', scoreData)
         .then(() => {
             console.log("Button Bought")
+
             //Update the users score in firebase
             updateUserScore(newScore, id);
         })
@@ -49,13 +70,6 @@ export default function Buttons({navigation}){
 
     }
 
-
-    
-    const buyButton = async (thisPrice, id) => {
-        getData(thisPrice, id);
-            
-    }
-       
 
 
      // Update Users score in firestore Database
@@ -67,6 +81,8 @@ export default function Buttons({navigation}){
         .then((result) => {addButtonToFirestore(id)})
         .catch((result) => {console.log("Failed to update score")})
     }
+
+    
 
     // Add Button to firestore
     const addButtonToFirestore = async (id) => {
@@ -92,6 +108,8 @@ export default function Buttons({navigation}){
         .catch(() => console.log("Failed to add button to firestore"))
     }
 
+
+
     //Setting new button to local storage
     const setNewButton = async (id) => {
         const newButton = JSON.stringify(id);
@@ -112,9 +130,9 @@ export default function Buttons({navigation}){
                 return(
                     <View key={element.id}  style={butStyles.top}>
                         {element.owned === false?
-                        <Text style={{fontSize: 18}}>Price: {element.price} TC</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>Price: {element.price} TC</Text>
                         :
-                        <Text style={{fontSize: 18}}>Owned</Text>
+                        <Text style={{fontSize: 18, color: 'white'}}>Owned</Text>
                         }
 
                         <View style={{alignItems: 'center', justifyContent: 'center'}}> 
@@ -148,12 +166,7 @@ const butStyles = StyleSheet.create({
         flex:1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
         height: 300,
-        borderWidth: 3,
-        elevation: 4,
-        backgroundColor: "#DCC66F",
-        borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,
     },
@@ -167,7 +180,7 @@ const butStyles = StyleSheet.create({
     },
     ButtonContainer: {
         elevation: 4,
-        backgroundColor: "#009688",
+        backgroundColor: "#f0e68c",
         borderRadius: 10,
         paddingVertical: 10,
         paddingHorizontal: 12,

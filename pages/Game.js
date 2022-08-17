@@ -5,7 +5,6 @@ import { authentication, db } from '../Firebase-config';
 import { getDoc, doc, updateDoc, getDocs, collection} from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AllButtons from '../AllButtons';
-import { HeaderBackButton } from 'react-navigation-stack';
 
 
 
@@ -17,17 +16,9 @@ export default function Game({navigation}){
     const [userName, setUserName] = useState('');
     const [currentButton, setCurrentButton] = useState([{'id': '0', 'name': require('../ButtonImage/mynt.png'), 'height': 150 * 1.5, 'width': 150 * 1.5} ]);
 
-    //Update score to firstore when pressing back button
-    React.useLayoutEffect(() => {
-        navigation.setOptions({
-          headerLeft: () => (
-            <HeaderBackButton onPress={() => {updateUserScore(count, true)}}/>
-          )
-        })
-      }, [count])
-    
 
-     // Store users score in locallstorage.
+    
+    // Store users score in locallstorage.
     const storeData = async (count1) => {
         const scoreData = JSON.stringify(count1);
         try { 
@@ -65,9 +56,11 @@ export default function Game({navigation}){
             if(thiscurrentButton !== null){
                 if(thiscurrentButton != currentButton[0].id)
                 console.log("Currentbutton " + thiscurrentButton)
+
+                // Loop true each button and find the selected button
                 AllButtons.forEach(element => {
                     if(element.id == thiscurrentButton){
-                        if(element.owned == false){return}
+                        if(element.owned == false){return} // If the user dosent own that button, return
                         setCurrentButton([{'id': element.id, 'name': element.name, 'height': element.height * 1.5, 'width': element.width * 1.5}]);
                         return;
                     }
@@ -111,36 +104,47 @@ export default function Game({navigation}){
 
 
 
+
+
+    useEffect(() => {
+    
     // Update Users score in firestore Database
-    const updateUserScore = async (thisscore, nav) => {
-        const currentUser = authentication.currentUser;
+    const updateUserScore = async () => {
+        const localScore = await AsyncStorage.getItem('score'); // Get score local
+            if (localScore === null){ 
+                return
+            }
+        const currentScore = parseInt(localScore);
+
+        console.log(currentScore)
+        const currentUser = authentication.currentUser; // Get current user
         const docRef = doc(db, 'Users', currentUser.email);
-        await updateDoc(docRef, {'Score': thisscore})
+        await updateDoc(docRef, {'Score': currentScore}) // Update score to firestore for that user
         .then((result) => {console.log("Updated Score")})
         .catch((result) => {console.log("Failed to update score")})
+                
+    }   
 
-        if(nav === true){
-            navigation.navigate('Login');
-            console.log("Updated score 2")
-        }
+    const Interval = setInterval(() => {
+        updateUserScore()
+    }, 1000 * 10)
+
+    return () => {
+        clearInterval(Interval);
     }
 
+    }, [])
 
-
-    //Navigate to leaderboard
-    const navigationhandler = (type) => {
-        navigation.navigate(type);
-    };
-
+   
 
     useEffect(() => {
         if(count == -1){getuserPageload()}
         
-          //Check for Updates in LocalStorage every 2 second
+          //Check for Updates in LocalStorage every second
           const IntervalLocal = setInterval(() => {
             getData()
 
-        }, 1000 * 2);
+        }, 1000 * 1);
 
 
         return () => {
@@ -158,30 +162,21 @@ export default function Game({navigation}){
         <View style={styles.container}>
 
             <View style={GameStyles.top}>
-            <Text>Username: {userName}</Text>
+                <View style={{borderBottomWidth: 2, borderColor: '#674919', width: 180, alignItems: 'center'}}>
+                    <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18, textTransform: "uppercase",}}>{userName}</Text>
+                </View>
             </View>
             
 
             <View style={GameStyles.mid}>
-            <Text>TC: {count}</Text>
+            <Text style={{color:'#f0e68c', fontStyle:'italic', fontSize:18}}>TC: {count}</Text>
              <TouchableOpacity
              onPress={() => setCount(count + 1)}>
                  <Image source={currentButton[0].name}  style={{width:currentButton[0].width, height:currentButton[0].height}}/>
              </TouchableOpacity>             
             </View>
 
-            <View style={GameStyles.bot}>
-            <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigationhandler('Leaderboard')}}>
-                 <Text style={styles.ButtonText}>Leaderboard</Text>
-             </TouchableOpacity>
-
-            <View style={{height:20}}></View>
-
-            <TouchableOpacity style={styles.ButtonContainer} onPress={() => {navigationhandler('Buttons')}}>
-                 <Text style={styles.ButtonText}>Store</Text>
-             </TouchableOpacity>
-            </View>
-             
+                
 
         </View>
     )
@@ -194,7 +189,7 @@ const GameStyles = StyleSheet.create ({
         justifyContent: 'center',
       },
     mid: {
-        flex: 1,
+        flex: 4,
         alignItems: 'center',
         justifyContent: 'center',
     },
