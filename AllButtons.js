@@ -4,11 +4,11 @@
     const allButtons = () => {
         const ButtonList = [
             {
-                id: '0',
-                name: require('./ButtonImage/mynt.png'),
-                width: 150,
-                height: 150,
-                owned: true,
+            id: '0',
+            name: require('./ButtonImage/pixilart-drawing.png'),
+            width: 150,
+            height: 150,
+            owned: true,
             },
             {id: '1',
             name: require('./ButtonImage/CoolButton.png'),

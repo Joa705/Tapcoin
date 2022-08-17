@@ -33,7 +33,7 @@ export default function Login({navigation}){
     const signinUser = () => {
         signInWithEmailAndPassword(authentication, email, password)
         .then((re) => {
-            navigatoinhandler();
+            navigatoinhandler(); // Navigate to the game page
         })
         .catch((re) => {
             console.log("failed to login")

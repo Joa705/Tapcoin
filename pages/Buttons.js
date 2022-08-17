@@ -22,7 +22,11 @@ export default function Buttons({navigation}){
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ]
     );
-
+    
+    // Init fucntion for buying a button
+    const buyButton = async (thisPrice, id) => {
+        getData(thisPrice, id);            
+    }
 
    // Get data stored locally
    const getData = async (Price1, id) => {
@@ -67,11 +71,6 @@ export default function Buttons({navigation}){
     }
 
 
-    const buyButton = async (thisPrice, id) => {
-        getData(thisPrice, id);            
-    }
-       
-
 
      // Update Users score in firestore Database
      const updateUserScore = async (thisscore, id) => {
@@ -82,6 +81,8 @@ export default function Buttons({navigation}){
         .then((result) => {addButtonToFirestore(id)})
         .catch((result) => {console.log("Failed to update score")})
     }
+
+    
 
     // Add Button to firestore
     const addButtonToFirestore = async (id) => {
@@ -106,6 +107,8 @@ export default function Buttons({navigation}){
         })
         .catch(() => console.log("Failed to add button to firestore"))
     }
+
+
 
     //Setting new button to local storage
     const setNewButton = async (id) => {
